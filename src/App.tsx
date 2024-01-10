@@ -1,11 +1,14 @@
 import './App.css'
 import { useState } from 'react';
+import clsx from 'clsx';
 
 function App() {
   const gridSize = 9;
   const gridTemplate: string[][] = Array.from({ length: gridSize }, () => Array(gridSize).fill(''));
 
   const [grid, setGrid] = useState(gridTemplate);
+  const [solvedGrid, setSolvedGrid] = useState(gridTemplate);
+  const [isSolved, setIsSolved] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, boxIndex: number, cellIndex: number) => {
     const value = event.target.value;
@@ -20,7 +23,11 @@ function App() {
 
   const solve = () => {
     const solvedGrid = solveGrid(flattenGrid(grid));
-    if (solvedGrid) setGrid(nestGrid(solvedGrid));
+    
+    if (solvedGrid) {
+      setIsSolved(true);
+      setSolvedGrid(nestGrid(solvedGrid))
+    }
   }
 
   const flattenGrid = (grid: string[][]) => {
@@ -113,7 +120,7 @@ function App() {
   return (
     <>
       <div className="grid grid-cols-3 w-fit">
-        {grid.map((box, boxIndex) => (
+        {(isSolved ? solvedGrid : grid).map((box, boxIndex) => (
           <div
             key={boxIndex}
             className="grid grid-cols-3 w-fit border border-neutral-500"
@@ -121,7 +128,10 @@ function App() {
             {box.map((cell, cellIndex) => (
               <input
                 key={cellIndex}
-                className="border w-8 h-8 text-center"
+                className={clsx(
+                  'border w-8 h-8 text-center',
+                  grid[boxIndex][cellIndex] !== solvedGrid[boxIndex][cellIndex] && cell && 'text-green-500'
+                )}
                 value={cell}
                 onChange={event => handleInputChange(event, boxIndex, cellIndex)}
               />
