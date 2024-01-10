@@ -118,7 +118,7 @@ function App() {
   }
 
   return (
-    <>
+    <div className="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center">
       <div className="grid grid-cols-3 w-fit">
         {(isSolved ? solvedGrid : grid).map((box, boxIndex) => (
           <div
@@ -129,7 +129,7 @@ function App() {
               <input
                 key={cellIndex}
                 className={clsx(
-                  'border w-8 h-8 text-center',
+                  'border w-12 h-12 text-center font-medium text-lg',
                   grid[boxIndex][cellIndex] !== solvedGrid[boxIndex][cellIndex] && cell && 'text-green-500'
                 )}
                 value={cell}
@@ -139,10 +139,13 @@ function App() {
           </div>
         ))}
       </div>
-      <button onClick={solve}>
+      <button
+        onClick={solve}
+        className="mt-4 px-3 py-2 bg-green-500 text-white rounded-md"
+      >
         Solve
       </button>
-    </>
+    </div>
   )
 }
 
